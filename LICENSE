@@ -1,0 +1,29 @@
+PPT Skill · Combined License Notice
+
+This repository is a derived merge of two upstream skill projects:
+
+1. guizang-ppt-skill
+   Source materials used: magazine-style single-file template, layouts,
+   components, themes, and checklist.
+   License: MIT License
+   Copyright (c) 2026 op7418 (歸藏)
+
+2. huashu-design
+   Source materials used: PPT/deck-specific templates, scripts, references,
+   BGM, and SFX assets.
+   License: Huashu Design Personal Use License
+   Copyright (c) 2026 alchaincyf (花叔 · 花生)
+
+Practical usage summary:
+
+- Personal learning, research, non-commercial creative use, and personal
+  derivative skill work are allowed.
+- Company, team, studio, agency, institutional, paid-client, commercial
+  product, paid template, paid subscription, commercial training, or paid
+  community use must follow the upstream huashu-design authorization terms.
+- MIT-licensed guizang-ppt-skill portions remain available under MIT terms,
+  but this combined project includes huashu-design materials and therefore
+  cannot be treated as purely MIT-licensed.
+
+Upstream license texts should be consulted before redistribution or
+commercial use.
