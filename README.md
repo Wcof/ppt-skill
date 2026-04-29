@@ -2,7 +2,7 @@
 
 用 Claude Code 做演讲级 PPT 的 Skill。装好之后，直接跟 Claude 聊天就能生成 PPT——不需要你会写代码。
 
-![PPT Skill 项目概览](assets/project-overview.svg)
+![PPT Skill 是什么以及怎么用](assets/readme-quickstart.svg)
 
 ## 怎么用
 

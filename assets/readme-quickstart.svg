@@ -1,0 +1,105 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PPT Skill 是什么以及怎么用</title>
+  <desc id="desc">这张图说明 PPT Skill 可以让用户把项目主题、资料和要求交给 Claude Code，由 Claude 完成大纲、视觉设计、HTML PPT 生成、检查和多格式导出。</desc>
+  <defs>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101820"/>
+      <stop offset="0.55" stop-color="#263238"/>
+      <stop offset="1" stop-color="#2F6F62"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBF7EE"/>
+      <stop offset="1" stop-color="#EEE3CC"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#101820" flood-opacity="0.18"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#A86E2A"/>
+    </marker>
+  </defs>
+
+  <rect width="1440" height="900" fill="#F4EFE2"/>
+  <rect x="0" y="0" width="1440" height="210" fill="url(#hero)"/>
+  <path d="M0 165C180 205 336 218 510 186C736 144 912 126 1126 166C1244 188 1340 188 1440 166V238H0Z" fill="#F4EFE2"/>
+
+  <text x="76" y="78" font-family="Georgia, 'Noto Serif SC', serif" font-size="50" font-weight="700" fill="#FBF7EE">PPT Skill</text>
+  <text x="76" y="128" font-family="'Noto Sans SC', Arial, sans-serif" font-size="25" fill="#EADFCB">把一句话需求，变成可演讲、可导出、可继续编辑的 HTML PPT</text>
+  <text x="76" y="166" font-family="'Noto Sans SC', Arial, sans-serif" font-size="18" fill="#CDBF9B">适合分享、课程、发布会、demo day 和强视觉节奏的演示 deck</text>
+
+  <g filter="url(#shadow)">
+    <rect x="76" y="255" width="392" height="456" rx="20" fill="#FFFFFF"/>
+    <rect x="76" y="255" width="392" height="12" rx="6" fill="#A86E2A"/>
+    <text x="112" y="322" font-family="'Noto Sans SC', Arial, sans-serif" font-size="30" font-weight="700" fill="#15212B">这是做什么的？</text>
+    <text x="112" y="372" font-family="'Noto Sans SC', Arial, sans-serif" font-size="22" fill="#34404A">一个 Claude Code Skill，</text>
+    <text x="112" y="405" font-family="'Noto Sans SC', Arial, sans-serif" font-size="22" fill="#34404A">专门用 HTML 生成高质量 PPT。</text>
+    <line x1="112" y1="440" x2="432" y2="440" stroke="#E6D8BC" stroke-width="2"/>
+    <g font-family="'Noto Sans SC', Arial, sans-serif" font-size="20" fill="#263238">
+      <circle cx="124" cy="488" r="7" fill="#2F6F62"/>
+      <text x="146" y="495">Claude 主动问需求、搭大纲</text>
+      <circle cx="124" cy="536" r="7" fill="#2F6F62"/>
+      <text x="146" y="543">内置主题、布局、动效和规范</text>
+      <circle cx="124" cy="584" r="7" fill="#2F6F62"/>
+      <text x="146" y="591">生成 HTML 演示源文件</text>
+      <circle cx="124" cy="632" r="7" fill="#2F6F62"/>
+      <text x="146" y="639">可验证、可导出、可继续改</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="524" y="225" width="392" height="516" rx="20" fill="url(#paper)"/>
+    <text x="560" y="292" font-family="'Noto Sans SC', Arial, sans-serif" font-size="30" font-weight="700" fill="#15212B">怎么用？</text>
+
+    <g font-family="'Noto Sans SC', Arial, sans-serif">
+      <circle cx="590" cy="356" r="24" fill="#101820"/>
+      <text x="583" y="364" font-size="22" font-weight="700" fill="#FFFFFF">1</text>
+      <text x="632" y="350" font-size="22" font-weight="700" fill="#15212B">安装到项目</text>
+      <text x="632" y="382" font-size="18" fill="#4F5A63">放到 .claude/skills/ppt-skill</text>
+
+      <circle cx="590" cy="458" r="24" fill="#101820"/>
+      <text x="583" y="466" font-size="22" font-weight="700" fill="#FFFFFF">2</text>
+      <text x="632" y="452" font-size="22" font-weight="700" fill="#15212B">启动 Claude Code</text>
+      <text x="632" y="484" font-size="18" fill="#4F5A63">在项目目录里运行 claude</text>
+
+      <circle cx="590" cy="560" r="24" fill="#101820"/>
+      <text x="583" y="568" font-size="22" font-weight="700" fill="#FFFFFF">3</text>
+      <text x="632" y="554" font-size="22" font-weight="700" fill="#15212B">直接说需求</text>
+      <text x="632" y="586" font-size="18" fill="#4F5A63">比如：做一份 30 分钟 AI 分享</text>
+
+      <circle cx="590" cy="662" r="24" fill="#101820"/>
+      <text x="583" y="670" font-size="22" font-weight="700" fill="#FFFFFF">4</text>
+      <text x="632" y="656" font-size="22" font-weight="700" fill="#15212B">确认并导出</text>
+      <text x="632" y="688" font-size="18" fill="#4F5A63">PDF、PPTX、MP4、GIF 按需生成</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="972" y="255" width="392" height="456" rx="20" fill="#FFFFFF"/>
+    <rect x="972" y="255" width="392" height="12" rx="6" fill="#2F6F62"/>
+    <text x="1008" y="322" font-family="'Noto Sans SC', Arial, sans-serif" font-size="30" font-weight="700" fill="#15212B">最终得到什么？</text>
+
+    <g font-family="'Noto Sans SC', Arial, sans-serif" font-size="19" fill="#263238">
+      <rect x="1008" y="365" width="150" height="62" rx="12" fill="#F4EFE2"/>
+      <text x="1049" y="403" font-weight="700">HTML</text>
+      <rect x="1180" y="365" width="150" height="62" rx="12" fill="#F4EFE2"/>
+      <text x="1234" y="403" font-weight="700">PDF</text>
+      <rect x="1008" y="449" width="150" height="62" rx="12" fill="#F4EFE2"/>
+      <text x="1047" y="487" font-weight="700">PPTX</text>
+      <rect x="1180" y="449" width="150" height="62" rx="12" fill="#F4EFE2"/>
+      <text x="1226" y="487" font-weight="700">MP4/GIF</text>
+    </g>
+
+    <line x1="1008" y1="548" x2="1330" y2="548" stroke="#E6D8BC" stroke-width="2"/>
+    <text x="1008" y="596" font-family="'Noto Sans SC', Arial, sans-serif" font-size="22" font-weight="700" fill="#15212B">内置能力</text>
+    <text x="1008" y="636" font-family="'Noto Sans SC', Arial, sans-serif" font-size="19" fill="#34404A">杂志风视觉、WebGL 背景、动效、</text>
+    <text x="1008" y="668" font-family="'Noto Sans SC', Arial, sans-serif" font-size="19" fill="#34404A">音效、导出脚本、截图验证和设计检查清单。</text>
+  </g>
+
+  <path d="M480 482H506" stroke="#A86E2A" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M928 482H954" stroke="#A86E2A" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="220" y="785" width="1000" height="56" rx="28" fill="#101820" opacity="0.92"/>
+    <text x="272" y="821" font-family="'Noto Sans SC', Arial, sans-serif" font-size="20" fill="#F7F1E3">一句话理解：把 PPT 创作流程封装成 Claude 能执行的工作流，让不会写代码的人也能做演讲级网页 PPT。</text>
+  </g>
+</svg>
