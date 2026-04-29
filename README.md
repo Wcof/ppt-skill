@@ -2,6 +2,8 @@
 
 用 Claude Code 做演讲级 PPT 的 Skill。安装后直接对话，Claude 会引导你完成选题、大纲、视觉系统、生成、验证、导出全流程。
 
+![PPT Skill 项目概览](assets/project-overview.svg)
+
 ## 怎么用
 
 ### 1. 安装
