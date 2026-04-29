@@ -1,6 +1,76 @@
 # PPT Skill
 
-A merged HTML presentation Claude Code Skill. Combines the editorial visual system from `guizang-ppt-skill` with the engineering export capabilities from `huashu-design` to produce presentation decks that can be presented, screenshotted, exported, or further edited.
+A Claude Code Skill for creating presentation-grade decks. Install it, then just talk — Claude guides you through topic selection, outlining, visual system, generation, verification, and export.
+
+## How to Use
+
+### 1. Install
+
+Place the entire directory in your project, or use a symlink:
+
+```bash
+# Option A: copy into project
+cp -r ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+
+# Option B: symlink (recommended, reuse across projects)
+ln -s /path/to/ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+```
+
+### 2. Generate by conversation
+
+After installation, describe your presentation in plain language inside Claude Code. Claude will follow the workflow defined in SKILL.md and guide you through each step.
+
+**Example conversation:**
+
+```
+You: Help me create a 30-minute presentation on AI Agents for a tech team
+
+Claude: Sure, let me clarify a few things first:
+1. What's the setting? (internal tech talk / conference / demo day)
+2. Do you have existing materials? (docs, articles, old decks)
+3. Which visual style? I have 5 preset themes to choose from
+...
+
+You: Internal tech talk, I have a Notion doc, let's go with Indigo Porcelain
+
+Claude: Got it. I'll read your doc, draft an outline for your approval, then start generating.
+```
+
+Claude follows this pipeline:
+
+```
+Clarify inputs → Choose architecture → Build visual system → Generate content → Verify → Export
+```
+
+No coding required — just answer questions and confirm proposals.
+
+### 3. Export
+
+After generation, export to multiple formats as needed:
+
+```bash
+# Verify (multi-viewport screenshots + console error detection)
+python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
+
+# PDF (vector text)
+node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
+
+# Editable PPTX (double-click to edit in PowerPoint/WPS)
+node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
+
+# Presentation video MP4 (requires global Playwright + ffmpeg)
+NODE_PATH=$(npm root -g) node scripts/render-video.js my-deck/index.html --duration=30
+
+# Convert MP4 to 60fps / GIF
+bash scripts/convert-formats.sh my-deck/index.mp4 960
+
+# Add BGM to video
+bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
+```
+
+> Dependencies (install as needed):
+> - PDF/PPTX/verification: `pip install playwright && playwright install chromium` and `npm install playwright pdf-lib pptxgenjs sharp`
+> - Video recording: `npm install -g playwright && playwright install chromium`, plus ffmpeg
 
 ## Features
 
@@ -16,7 +86,7 @@ A merged HTML presentation Claude Code Skill. Combines the editorial visual syst
 
 - **Three architectures**: single-file horizontal scroll (≤10 pages), multi-file iframe splicing (10+ pages), deck-stage web component
 - **Full format export**: PDF (vector text), editable PPTX (double-click edit), MP4 (25/60fps), GIF (palette optimized)
-- **Presentation audio**: 3 scene-based BGM tracks + 31 SFX presets, auto-mixing support
+- **Presentation audio**: 3 scene-based BGM tracks + 34 SFX presets, auto-mixing support
 - **Playwright verification**: multi-viewport screenshots, console error detection
 
 ### Design Methodology
@@ -40,9 +110,10 @@ ppt-skill/
 │   │   ├── deck_index.html               # Multi-file deck splicer
 │   │   └── deck_stage.js                 # <deck-stage> web component
 │   ├── motion.min.js                     # Motion One animation library (offline fallback, 64KB)
+│   ├── examples/                          # Example projects
 │   └── audio/
 │       ├── bgm/                          # 3 scene-based BGM tracks (tech / tutorial / educational)
-│       └── sfx/                          # 31 sound effects (8 categories)
+│       └── sfx/                          # 34 sound effects (8 categories)
 ├── references/
 │   ├── architecture.md                   # Single-file vs multi-file vs deck-stage architecture
 │   ├── layouts.md                        # 10 page layout skeletons (with animation markers)
@@ -64,64 +135,6 @@ ppt-skill/
     ├── convert-formats.sh                # MP4 → 60fps MP4 + GIF
     └── add-music.sh                      # Mix BGM into video
 ```
-
-## Quick Start
-
-### Single-file magazine deck
-
-```bash
-mkdir -p my-deck/images
-cp assets/templates/single-file-magazine.html my-deck/index.html
-# For offline animations, copy motion.min.js
-mkdir -p my-deck/assets
-cp assets/motion.min.js my-deck/assets/
-open my-deck/index.html
-```
-
-### Multi-file deck
-
-```bash
-mkdir -p my-deck/slides my-deck/shared
-cp assets/templates/deck_index.html my-deck/index.html
-open my-deck/index.html
-```
-
-## Export & Verify
-
-```bash
-# Verify (multi-viewport screenshots + console error detection)
-python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
-
-# PDF export
-node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
-
-# Editable PPTX export
-node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
-
-# Video export
-node scripts/render-video.js my-deck/index.html --duration=30
-bash scripts/convert-formats.sh my-deck/index.mp4 960
-
-# Add BGM to video
-bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
-```
-
-Install dependencies as needed:
-
-```bash
-pip install playwright && playwright install chromium
-npm install playwright pdf-lib pptxgenjs sharp
-```
-
-## Workflow Overview
-
-1. **Clarify inputs**: audience, duration, materials, output format, theme, constraints
-2. **Choose architecture**: single-file (≤10 pages) / multi-file (10+ pages) / deck-stage
-3. **Establish visual system**: font roles, color rhythm, layout pool, image rules
-4. **Generate content**: pick skeletons from layouts.md, use components from components.md
-5. **Verify & export**: self-check with checklist.md → verify.py → export as needed
-
-See `SKILL.md` for details.
 
 ## License
 

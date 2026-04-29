@@ -49,20 +49,28 @@ Claude 会按这个流程推进：
 生成完成后，可以按需导出为多种格式：
 
 ```bash
+# 验证（多视口截图 + console 错误检测）
+python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
+
 # PDF（矢量文字）
 node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
 
 # 可编辑 PPTX（双击即可在 PowerPoint/WPS 中编辑）
 node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
 
-# 演示视频 MP4
-node scripts/render-video.js my-deck/index.html --duration=30
+# 演示视频 MP4（需要全局 Playwright + ffmpeg）
+NODE_PATH=$(npm root -g) node scripts/render-video.js my-deck/index.html --duration=30
+
+# MP4 转 60fps / GIF
+bash scripts/convert-formats.sh my-deck/index.mp4 960
 
 # 视频加 BGM
 bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
 ```
 
-> 导出功能需要按需安装依赖：`pip install playwright && playwright install chromium` 和 `npm install playwright pdf-lib pptxgenjs sharp`
+> 依赖按需安装：
+> - PDF/PPTX/验证：`pip install playwright && playwright install chromium` 和 `npm install playwright pdf-lib pptxgenjs sharp`
+> - 视频录制：`npm install -g playwright && playwright install chromium`，还需要 ffmpeg
 
 ## 特性
 
@@ -78,7 +86,7 @@ bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
 
 - **三种架构**：单文件横向翻页（≤10 页）、多文件 iframe 拼接（10+ 页）、deck-stage web component
 - **全格式导出**：PDF（矢量文字）、可编辑 PPTX（双击编辑）、MP4（25/60fps）、GIF（palette 优化）
-- **演示音频**：3 首场景化 BGM + 31 个 SFX 预制素材，支持自动混合
+- **演示音频**：3 首场景化 BGM + 34 个 SFX 预制素材，支持自动混合
 - **Playwright 验证**：多视口截图、console 错误检测
 
 ### 设计方法论
@@ -95,6 +103,7 @@ bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
 ppt-skill/
 ├── SKILL.md                              # 核心 skill 定义（工作流 + 原则 + 清单）
 ├── README.md
+├── README.en.md                          # English README
 ├── LICENSE
 ├── assets/
 │   ├── templates/
@@ -102,9 +111,10 @@ ppt-skill/
 │   │   ├── deck_index.html               # 多文件 deck 拼接器
 │   │   └── deck_stage.js                 # <deck-stage> web component
 │   ├── motion.min.js                     # Motion One 动效库（离线兜底，64KB）
+│   ├── examples/                          # 示例项目
 │   └── audio/
 │       ├── bgm/                          # 3 首场景化 BGM（tech / tutorial / educational）
-│       └── sfx/                          # 31 个音效（8 类：keyboard / ui / transition / container / feedback / progress / impact / terminal）
+│       └── sfx/                          # 34 个音效（8 类：keyboard / ui / transition / container / feedback / progress / impact / terminal）
 ├── references/
 │   ├── architecture.md                   # 单文件 vs 多文件 vs deck-stage 架构选择
 │   ├── layouts.md                        # 10 种页面布局骨架（含动效标记）
