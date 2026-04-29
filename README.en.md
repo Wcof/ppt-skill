@@ -2,25 +2,57 @@
 
 A Claude Code Skill for creating presentation-grade decks. Install it, then just talk — Claude guides you through topic selection, outlining, visual system, generation, verification, and export.
 
-## How to Use
+![PPT Skill Overview](assets/project-overview.svg)
 
-### 1. Install
+## How to Use (3 Steps)
 
-Place the entire directory in your project, or use a symlink:
+### Step 1: Install the skill into your project
+
+Say your project lives at `~/my-project/`. Just clone this repo into the `.claude/skills/` directory inside your project:
 
 ```bash
-# Option A: copy into project
-cp -r ppt-skill /path/to/your-project/.claude/skills/ppt-skill
-
-# Option B: symlink (recommended, reuse across projects)
-ln -s /path/to/ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+cd ~/my-project/
+mkdir -p .claude/skills
+git clone https://github.com/Wcof/ppt-skill.git .claude/skills/ppt-skill
 ```
 
-### 2. Generate by conversation
+Your project will then look like this:
 
-After installation, describe your presentation in plain language inside Claude Code. Claude will follow the workflow defined in SKILL.md and guide you through each step.
+```
+my-project/
+├── .claude/
+│   └── skills/
+│       └── ppt-skill/        ← this repo
+│           ├── SKILL.md
+│           └── ...
+└── ...（your project files）
+```
 
-**Example conversation:**
+> **Why here?** Claude Code automatically reads skill files from `.claude/skills/` in your project. No extra config needed — Claude picks it up on its own.
+
+> **Want to use it in multiple projects?** Clone once, then symlink:
+> ```bash
+> git clone https://github.com/Wcof/ppt-skill.git ~/ppt-skill
+> mkdir -p ~/my-project/.claude/skills
+> ln -s ~/ppt-skill ~/my-project/.claude/skills/ppt-skill
+> ```
+
+### Step 2: Open Claude Code and tell it what you want
+
+Open your terminal, `cd` into your project, and start Claude Code:
+
+```bash
+cd ~/my-project/
+claude
+```
+
+Then just describe your presentation in plain language:
+
+```
+Help me create a 30-minute presentation on AI Agents for a tech team
+```
+
+**Claude will guide you — no commands to memorize.** The conversation goes something like:
 
 ```
 You: Help me create a 30-minute presentation on AI Agents for a tech team
@@ -33,43 +65,43 @@ Claude: Sure, let me clarify a few things first:
 
 You: Internal tech talk, I have a Notion doc, let's go with Indigo Porcelain
 
-Claude: Got it. I'll read your doc, draft an outline for your approval, then start generating.
+Claude: Got it. I'll read your doc, draft an outline for your approval.
 ```
 
-Claude follows this pipeline:
+Claude walks you through this pipeline step by step:
 
 ```
-Clarify inputs → Choose architecture → Build visual system → Generate content → Verify → Export
+Ask about your needs → Draft outline (for your approval) → Pick visual style → Generate pages → Quality check → Export
 ```
 
-No coding required — just answer questions and confirm proposals.
+**All you do is answer questions and confirm — zero coding required.**
 
-### 3. Export
+### Step 3: Export to your desired format
 
-After generation, export to multiple formats as needed:
+After generation, Claude will ask what format you want. You can also run the commands yourself:
 
 ```bash
-# Verify (multi-viewport screenshots + console error detection)
+# Verify (check for rendering errors)
 python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
 
-# PDF (vector text)
+# Export PDF
 node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
 
-# Editable PPTX (double-click to edit in PowerPoint/WPS)
+# Export editable PPTX (double-click to edit in PowerPoint / WPS)
 node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
 
-# Presentation video MP4 (requires global Playwright + ffmpeg)
+# Export presentation video MP4
 NODE_PATH=$(npm root -g) node scripts/render-video.js my-deck/index.html --duration=30
 
-# Convert MP4 to 60fps / GIF
+# Convert MP4 to 60fps or GIF
 bash scripts/convert-formats.sh my-deck/index.mp4 960
 
-# Add BGM to video
+# Add background music to video
 bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
 ```
 
-> Dependencies (install as needed):
-> - PDF/PPTX/verification: `pip install playwright && playwright install chromium` and `npm install playwright pdf-lib pptxgenjs sharp`
+> Export requires extra tools (the skill still works without them — you just can't export):
+> - PDF / PPTX / verification: `pip install playwright && playwright install chromium` + `npm install playwright pdf-lib pptxgenjs sharp`
 > - Video recording: `npm install -g playwright && playwright install chromium`, plus ffmpeg
 
 ## Features

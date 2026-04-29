@@ -4,30 +4,69 @@
 
 ![PPT Skill 项目概览](assets/project-overview.svg)
 
-## 怎么用
+## 怎么用（3 步搞定）
 
-### 1. 安装
+### 第 1 步：把这个 skill 装进你的项目
 
-把整个目录放到你的项目里，或者用符号链接：
+假设你要做一个 PPT，你的项目目录是 `~/my-project/`。
+
+**只需要把本仓库克隆（或下载）到你项目的 `.claude/skills/` 目录下：**
 
 ```bash
-# 方式一：直接放到项目中
-cp -r ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+# 进入你的项目目录
+cd ~/my-project/
 
-# 方式二：符号链接（推荐，多项目复用）
-ln -s /path/to/ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+# 创建 skills 目录（如果还没有的话）
+mkdir -p .claude/skills
+
+# 克隆本仓库到 skills 目录下
+git clone https://github.com/Wcof/ppt-skill.git .claude/skills/ppt-skill
 ```
 
-### 2. 对话生成
+装完后你的项目目录长这样：
 
-安装后，在 Claude Code 中直接用自然语言描述你要做的 PPT。Claude 会根据 SKILL.md 中的流程自动引导你。
+```
+my-project/
+├── .claude/
+│   └── skills/
+│       └── ppt-skill/        ← 就是本仓库
+│           ├── SKILL.md
+│           └── ...
+└── ...（你项目的其他文件）
+```
 
-**示例对话：**
+> **为什么要放这里？** Claude Code 会自动读取项目下 `.claude/skills/` 里的 skill 文件。放好之后不需要额外配置，Claude 自己就能识别。
+
+> **多个项目都想用？** 可以用符号链接避免重复克隆：
+> ```bash
+> # 克隆一次
+> git clone https://github.com/Wcof/ppt-skill.git ~/ppt-skill
+> # 然后在每个项目里链接
+> mkdir -p ~/my-project/.claude/skills
+> ln -s ~/ppt-skill ~/my-project/.claude/skills/ppt-skill
+> ```
+
+### 第 2 步：打开 Claude Code，直接说你要做什么
+
+打开终端，`cd` 到你的项目目录，启动 Claude Code：
+
+```bash
+cd ~/my-project/
+claude
+```
+
+然后直接用自然语言告诉它你要做什么 PPT，比如：
+
+```
+帮我做一份关于 AI Agent 的分享 PPT，30 分钟，面向技术团队
+```
+
+**Claude 会主动引导你，不需要你记任何命令。** 对话大概长这样：
 
 ```
 你：帮我做一份关于 AI Agent 的分享 PPT，30 分钟，面向技术团队
 
-Claude：好的，我来帮你梳理。先确认几个关键信息：
+Claude：好的，先确认几个关键信息：
 1. 分享场景是？（内部技术分享 / 大会演讲 / demo day）
 2. 有没有现成的素材？（文档、文章、旧 PPT）
 3. 想要哪套视觉风格？我有 5 套预设主题可选
@@ -35,44 +74,44 @@ Claude：好的，我来帮你梳理。先确认几个关键信息：
 
 你：内部技术分享，我有一篇 Notion 文档，风格选靛蓝瓷
 
-Claude：收到，我先读你的文档，搭大纲给你确认，然后开始生成。
+Claude：收到，我先读你的文档，搭大纲给你确认。
 ```
 
-Claude 会按这个流程推进：
+它会按这个流程一步步带你走完：
 
 ```
-明确输入 → 选择架构 → 建立视觉系统 → 生成内容 → 验证 → 导出
+问你需求 → 搭大纲（给你确认）→ 选视觉风格 → 生成页面 → 质量检查 → 导出文件
 ```
 
-全程不需要你写代码，只需要回答问题和确认方案。
+**全程你只需要回答问题和点确认，不需要写任何代码。**
 
-### 3. 导出
+### 第 3 步：导出为你要的格式
 
-生成完成后，可以按需导出为多种格式：
+PPT 生成完后，Claude 会问你要导出什么格式。你也可以自己跑命令：
 
 ```bash
-# 验证（多视口截图 + console 错误检测）
+# 验证（检查有没有渲染错误）
 python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
 
-# PDF（矢量文字）
+# 导出 PDF
 node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
 
-# 可编辑 PPTX（双击即可在 PowerPoint/WPS 中编辑）
+# 导出可编辑 PPTX（双击就能在 PowerPoint / WPS 里编辑）
 node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
 
-# 演示视频 MP4（需要全局 Playwright + ffmpeg）
+# 导出演示视频 MP4
 NODE_PATH=$(npm root -g) node scripts/render-video.js my-deck/index.html --duration=30
 
-# MP4 转 60fps / GIF
+# 视频转 60fps 或 GIF
 bash scripts/convert-formats.sh my-deck/index.mp4 960
 
-# 视频加 BGM
+# 给视频加背景音乐
 bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
 ```
 
-> 依赖按需安装：
-> - PDF/PPTX/验证：`pip install playwright && playwright install chromium` 和 `npm install playwright pdf-lib pptxgenjs sharp`
-> - 视频录制：`npm install -g playwright && playwright install chromium`，还需要 ffmpeg
+> 导出功能需要额外装一些工具（不装也能用，只是导出功能用不了）：
+> - PDF / PPTX / 验证：`pip install playwright && playwright install chromium` + `npm install playwright pdf-lib pptxgenjs sharp`
+> - 视频录制：`npm install -g playwright && playwright install chromium`，还需要系统装 ffmpeg
 
 ## 特性
 
