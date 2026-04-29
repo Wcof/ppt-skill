@@ -1,6 +1,68 @@
 # PPT Skill
 
-融合版网页版 PPT Claude Code Skill。综合 `guizang-ppt-skill` 的电子杂志风视觉体系和 `huashu-design` 的工程化导出能力，产出可直接演讲、截图、导出或继续编辑的 PPT 作品。
+用 Claude Code 做演讲级 PPT 的 Skill。安装后直接对话，Claude 会引导你完成选题、大纲、视觉系统、生成、验证、导出全流程。
+
+## 怎么用
+
+### 1. 安装
+
+把整个目录放到你的项目里，或者用符号链接：
+
+```bash
+# 方式一：直接放到项目中
+cp -r ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+
+# 方式二：符号链接（推荐，多项目复用）
+ln -s /path/to/ppt-skill /path/to/your-project/.claude/skills/ppt-skill
+```
+
+### 2. 对话生成
+
+安装后，在 Claude Code 中直接用自然语言描述你要做的 PPT。Claude 会根据 SKILL.md 中的流程自动引导你。
+
+**示例对话：**
+
+```
+你：帮我做一份关于 AI Agent 的分享 PPT，30 分钟，面向技术团队
+
+Claude：好的，我来帮你梳理。先确认几个关键信息：
+1. 分享场景是？（内部技术分享 / 大会演讲 / demo day）
+2. 有没有现成的素材？（文档、文章、旧 PPT）
+3. 想要哪套视觉风格？我有 5 套预设主题可选
+...
+
+你：内部技术分享，我有一篇 Notion 文档，风格选靛蓝瓷
+
+Claude：收到，我先读你的文档，搭大纲给你确认，然后开始生成。
+```
+
+Claude 会按这个流程推进：
+
+```
+明确输入 → 选择架构 → 建立视觉系统 → 生成内容 → 验证 → 导出
+```
+
+全程不需要你写代码，只需要回答问题和确认方案。
+
+### 3. 导出
+
+生成完成后，可以按需导出为多种格式：
+
+```bash
+# PDF（矢量文字）
+node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
+
+# 可编辑 PPTX（双击即可在 PowerPoint/WPS 中编辑）
+node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
+
+# 演示视频 MP4
+node scripts/render-video.js my-deck/index.html --duration=30
+
+# 视频加 BGM
+bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
+```
+
+> 导出功能需要按需安装依赖：`pip install playwright && playwright install chromium` 和 `npm install playwright pdf-lib pptxgenjs sharp`
 
 ## 特性
 
@@ -64,64 +126,6 @@ ppt-skill/
     ├── convert-formats.sh                # MP4 → 60fps MP4 + GIF
     └── add-music.sh                      # 混合 BGM 到视频
 ```
-
-## 快速开始
-
-### 单文件杂志风 PPT
-
-```bash
-mkdir -p my-deck/images
-cp assets/templates/single-file-magazine.html my-deck/index.html
-# 如果需要离线动效，复制 motion.min.js
-mkdir -p my-deck/assets
-cp assets/motion.min.js my-deck/assets/
-open my-deck/index.html
-```
-
-### 多文件 deck
-
-```bash
-mkdir -p my-deck/slides my-deck/shared
-cp assets/templates/deck_index.html my-deck/index.html
-open my-deck/index.html
-```
-
-## 导出与验证
-
-```bash
-# 验证（多视口截图 + console 错误检测）
-python3 scripts/verify.py my-deck/index.html --viewports 1920x1080,375x667
-
-# PDF 导出
-node scripts/export_deck_pdf.mjs --slides my-deck/slides --out my-deck/deck.pdf
-
-# 可编辑 PPTX 导出
-node scripts/export_deck_pptx.mjs --slides my-deck/slides --out my-deck/deck.pptx
-
-# 视频导出
-node scripts/render-video.js my-deck/index.html --duration=30
-bash scripts/convert-formats.sh my-deck/index.mp4 960
-
-# 视频加 BGM
-bash scripts/add-music.sh my-deck/index.mp4 --mood=tech
-```
-
-依赖按需安装：
-
-```bash
-pip install playwright && playwright install chromium
-npm install playwright pdf-lib pptxgenjs sharp
-```
-
-## 工作流概览
-
-1. **明确输入**：受众、时长、素材、输出格式、主题、硬约束
-2. **选择架构**：单文件（≤10 页）/ 多文件（10+ 页）/ deck-stage
-3. **建立视觉系统**：字体分工、颜色节奏、布局池、图片规则
-4. **生成内容**：参考 layouts.md 挑骨架，参考 components.md 用组件
-5. **验证导出**：checklist.md 自检 → verify.py 验证 → 按需导出
-
-详见 `SKILL.md`。
 
 ## 来源与许可
 
