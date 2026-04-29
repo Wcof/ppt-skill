@@ -17,6 +17,7 @@
 - [Icons 图标](#icons-图标)
 - [Ghost 巨型背景字](#ghost-巨型背景字)
 - [Highlight 荧光标记](#highlight-荧光标记)
+- [Motion 动效系统](#motion-动效系统)
 
 ---
 
@@ -254,9 +255,11 @@
 
 ### 关键约束（血泪经验，不要违反）
 
-1. **必须用 `height:Nvh` 固定高度**，不要用 `aspect-ratio`。
-   - 原因：用 aspect-ratio 在网格里会撑破父容器，导致图片堆叠。
-   - 推荐尺寸：`height:18vh` (紧凑条形) / `22vh` (标准网格) / `26vh` (突出展示) / `28vh` (大图)。
+1. **图片网格必须用 `height:Nvh` 固定高度**，不要用 `aspect-ratio`。
+   - 原因：网格里用 aspect-ratio 容易撑破父容器，导致图片堆叠。
+   - 推荐尺寸：`.h-16` (小型面板) / `.h-18` (紧凑条形) / `.h-22` (标准网格) / `.h-26` (突出展示) / `.h-28` (大图)。
+   - 单张主图可以用模板提供的比例类：`.r-16x9` / `.r-16x10` / `.r-4x3` / `.r-3x2` / `.r-3x4` / `.r-1x1`。
+   - 同一组图片必须使用同一个高度类，不要一张 `25vh`、一张 `21vh` 混用。
 
 2. **`object-position:top center`（已在 CSS 里设好）**，只允许裁掉底部。
    - 严禁裁剪左右和顶部 —— 这是图片的核心身份信息区。
@@ -270,7 +273,11 @@
    </div>
    ```
 
-4. **图片与布局其他部分对齐**：figure 单独加 `align-self:end` 让图片贴底。
+4. **图片与布局其他部分对齐**：使用 `.grid-2-7-5` / `.grid-2-6-6` / `.grid-2-8-4` 的 grid 结构自然顶对齐。不要给图片加 `align-self:end`。
+
+5. **信息图 / 截图再设计**：给 `.frame-img` 同时加 `.fit-contain`，避免图内文字和标注被裁切。
+
+6. **用户原始截图比例不合适时**：优先重新生成"截图再设计 / UI 情景图"到目标比例，不要把原图硬塞成长条。
 
 ### Frame Caption 变体
 
@@ -361,3 +368,72 @@
 在文字底部生成一条半透明高亮条。深色主题用亮条，浅色主题用暗条（CSS 已处理）。
 
 **适合场景**：只对关键 1-3 个词使用，不要大面积用。
+
+---
+
+## Motion 动效系统
+
+整套 deck 默认开启翻页入场动画，由 Motion One（vanilla 版 Framer Motion，约 4KB）驱动。
+
+### 加载方式
+
+`assets/templates/single-file-magazine.html` 底部的 module script 会先尝试**本地** `assets/motion.min.js`，失败则回落到 **jsdelivr CDN**，两者都失败则强制把所有带 `data-anim` 的元素设为 `opacity:1`——内容永远可读，演示不依赖网络。
+
+```js
+// template 里的核心加载器（不用改）
+let motion;
+try { motion = await import('./assets/motion.min.js'); }
+catch(e1) {
+  try { motion = await import('https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm'); }
+  catch(e2) {
+    document.querySelectorAll('[data-anim]').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
+  }
+}
+```
+
+### 数据属性驱动
+
+你只需要在 HTML 里加两种属性：
+
+```html
+<!-- 1. 在 section 上选 recipe（可选，默认 cascade / hero 自动） -->
+<section class="slide light" data-animate="quote">
+
+<!-- 2. 在需要入场的元素上加 data-anim（可选值：left/right/line/step/divider） -->
+<h1 class="h-xl" data-anim>大标题</h1>
+<div class="stat-card" data-anim>...</div>
+<div data-anim="left">左列内容</div>
+<span data-anim="line" style="display:block">引用第一行</span>
+```
+
+### 5 种 recipe 一览
+
+| recipe | 触发方式 | 行为 | 代表布局 |
+|---|---|---|---|
+| `cascade`（默认） | 不加 `data-animate` 即为此值 | 所有 `data-anim` 逐个 stagger 淡入，75ms/step | Layout 3 / 4 / 5 / 10 |
+| `hero` | `.hero` slide 自动用此值 | 慢节奏 stagger，仪式感更强，160ms/step | Layout 1 / 2 / 7 |
+| `quote` | `data-animate="quote"` | 其他元素先出，`data-anim="line"` 的行 550ms 间隔逐句揭示 | Layout 8 |
+| `directional` | `data-animate="directional"` | `data-anim="left"` 从左滑入 → divider → `data-anim="right"` 从右滑入 | Layout 9 |
+| `pipeline` | `data-animate="pipeline"` | 翻到此页 step 保持 15% 透明；按 →/空格/滚轮逐个点亮，最后一步才放行翻页 | Layout 6 |
+
+### 给 slide 选 recipe 的决策树
+
+1. **它是 `.hero` slide 吗？** → 不用加 `data-animate`，自动用 `hero`
+2. **它是大引用金句页？** → `data-animate="quote"`，每句用 `<span data-anim="line" style="display:block">`
+3. **它是左右对比 Before/After？** → `data-animate="directional"`，左列 `data-anim="left"`、右列 `data-anim="right"`
+4. **它是流水线分步讲解？** → `data-animate="pipeline"`，每步 `data-anim="step"`
+5. **其他所有正文页** → 什么也不加，自动用 `cascade`
+
+### 什么元素该加 `data-anim`？
+
+- ✅ 每一层有独立语义的块：kicker / h1 / h-xl / lead / callout / stat-card / figure / tag / rowline
+- ✅ 多列结构里每一列，让它们逐列淡入而不是一起
+- ❌ 不要在容器（`.grid-6` / `.frame`）上加，只加给叶子元素
+- ❌ 不要在每个 `<li>` 上加，一般在 `<ul>` 层加就够
+- ❌ 如果某页不想要任何动画（比如过渡页），整页不加 `data-anim` 即可 — Motion One 只对带标记的元素生效
+
+### 常见问题
+
+- **图片闪一下再出现？** 这是预期行为，翻页中段（450ms 时）触发动画
+- **Pipeline 页卡住翻不下页？** 正确的，按 → 一步一步点亮 step，全部点亮后再按 → 才翻页
+- **内容静态时也不显示？** 检查 motion.min.js 是否在 `assets/` 下；或者浏览器控制台看错误信息

@@ -44,15 +44,31 @@ assets/audio/
 
 ## SFX 快速索引
 
-- 打字输入：`keyboard/type.mp3`、`keyboard/type-fast.mp3`、`keyboard/enter.mp3`。
-- 翻页和切换：`transition/swipe-horizontal.mp3`、`transition/whoosh-fast.mp3`、`transition/dissolve.mp3`。
-- 点击和聚焦：`ui/click.mp3`、`ui/click-soft.mp3`、`ui/focus.mp3`。
-- 卡片和容器：`container/card-snap.mp3`、`container/card-flip.mp3`。
-- 完成反馈：`feedback/success-chime.mp3`、`progress/complete-done.mp3`。
-- 品牌落点：`impact/logo-reveal.mp3`、`impact/logo-reveal-v2.mp3`、`impact/brand-stamp.mp3`。
-- 终端演示：`terminal/command-execute.mp3`、`terminal/output-appear.mp3`。
+- 打字输入：`keyboard/type.mp3`、`keyboard/type-fast.mp3`、`keyboard/enter.mp3`、`keyboard/space-tap.mp3`、`keyboard/delete-key.mp3`。
+- 翻页和切换：`transition/swipe-horizontal.mp3`、`transition/whoosh-fast.mp3`、`transition/whoosh.mp3`、`transition/dissolve.mp3`、`transition/slide-in.mp3`。
+- 点击和聚焦：`ui/click.mp3`、`ui/click-soft.mp3`、`ui/focus.mp3`、`ui/hover-subtle.mp3`、`ui/tap-finger.mp3`、`ui/toggle-on.mp3`。
+- 卡片和容器：`container/card-snap.mp3`、`container/card-flip.mp3`、`container/modal-open.mp3`、`container/stack-collapse.mp3`。
+- 完成反馈：`feedback/success-chime.mp3`、`feedback/achievement.mp3`、`feedback/error-tone.mp3`、`feedback/notification-pop.mp3`。
+- 进度：`progress/complete-done.mp3`、`progress/loading-tick.mp3`、`progress/generate-start.mp3`。
+- 品牌落点：`impact/logo-reveal.mp3`、`impact/logo-reveal-v2.mp3`、`impact/brand-stamp.mp3`、`impact/drop-thud.mp3`。
+- 终端演示：`terminal/command-execute.mp3`、`terminal/output-appear.mp3`、`terminal/cursor-blink.mp3`。
 
 ## 合成模板
+
+### 快捷方式（推荐）
+
+使用 `scripts/add-music.sh` 自动混合 BGM：
+
+```bash
+# 使用预设 mood（tech / tutorial / educational）
+bash scripts/add-music.sh ./video.mp4 --mood=tech
+# 使用自定义 BGM 文件
+bash scripts/add-music.sh ./video.mp4 --music=./my-bgm.mp3
+```
+
+脚本会自动：裁剪 BGM 到视频时长、0.3s fade-in、1.0s fade-out、输出到 `./video-scored.mp4`。
+
+### 手动 ffmpeg
 
 视频 + SFX + BGM：
 
